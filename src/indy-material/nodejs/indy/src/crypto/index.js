@@ -1,12 +1,13 @@
 'use strict';
 const sdk = require('indy-sdk');
 const indy = require('../../index.js');
-const uuid = require('uuid');
+// const uuid = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 exports.createMasterSecret = async function () {
     let masterSecretId = await indy.did.getEndpointDidAttribute('master_secret_id');
     if(!masterSecretId) {
-        masterSecretId = uuid();
+        masterSecretId = uuidv4();
         await sdk.proverCreateMasterSecret(await indy.wallet.get(), masterSecretId);
         await indy.did.setEndpointDidAttribute('master_secret_id', masterSecretId);
     }

@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
-const uuid = require('uuid');
+// const uuidv4 = require('uuidv4');
+const { v4: uuidv4 } = require("uuid");
 const homedir = require('home-dir');
 const config = require('../../../config');
 
@@ -40,7 +41,7 @@ exports.messages = {
   },
   write: function (did, message) {
     init();
-    let id = uuid();
+    let id = uuidv4();
     store.pendingMessages.push({
       id: id,
       timestamp: new Date(),
@@ -83,7 +84,7 @@ exports.pendingRelationships = {
   write: function (myNewDid, theirEndpointDid, nonce) {
     init();
     store.pendingRelationships.push({
-      id: uuid(),
+      id: uuidv4(),
       timestamp: new Date(),
       myNewDid: myNewDid,
       theirEndpointDid: theirEndpointDid,
@@ -115,7 +116,7 @@ exports.pendingCredentialOffers = {
     },
     write: function (credOffer) {
         init();
-        let id = uuid();
+        let id = uuidv4();
         store.pendingCredentialOffers.push({
             id: id,
             offer: credOffer
@@ -155,7 +156,7 @@ exports.pendingCredentialRequests = {
     },
     write: function (credRequestJson, credRequestMetadataJson) {
         init();
-        let id = uuid();
+        let id = uuidv4();
         store.pendingCredentialRequests.push({
             id: id,
             credRequestJson: credRequestJson,
@@ -196,7 +197,7 @@ exports.pendingProofRequests = {
     },
     write: function (proofRequest) {
         init();
-        let id = uuid();
+        let id = uuidv4();
         store.pendingProofRequests.push({
             id: id,
             proofRequest: proofRequest

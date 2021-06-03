@@ -5,7 +5,7 @@ FROM bcgovimages/von-image:py36-1.6-8
 USER root
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y \
         nodejs \
         build-essential
@@ -21,7 +21,16 @@ ENV LD_LIBRARY_PATH=$HOME/.local/lib:/usr/local/lib:/usr/lib
 
 # Get the dependencies loaded first - this makes rebuilds faster
 COPY --chown=indy:indy package.json .
+
+USER root
+RUN npm install --save-dev react
+RUN npm install --save-dev react-dom
+# RUN npm i -g npm-check-updates
+# RUN ncu -u
 RUN npm install
+
+USER indy
+
 
 # Copy rest of the app
 COPY --chown=indy:indy . .

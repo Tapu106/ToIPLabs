@@ -1,7 +1,8 @@
 'use strict';
 const sdk = require('indy-sdk');
 const indy = require('../../index.js');
-const uuid = require('uuid');
+// const uuid = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 /*
 urn:jwm:sovrin.org/connections/v1/offer
@@ -22,7 +23,7 @@ exports.prepareRequest = async function (theirEndpointDid) {
     let [myNewDid, myNewVerkey] = await sdk.createAndStoreMyDid(await indy.wallet.get(), {});
     await indy.pool.sendNym(await indy.pool.get(), await indy.wallet.get(), await indy.did.getEndpointDid(), myNewDid, myNewVerkey);
 
-    let nonce = uuid();
+    let nonce = uuidv4();
     indy.store.pendingRelationships.write(myNewDid, theirEndpointDid, nonce);
 
     return {
