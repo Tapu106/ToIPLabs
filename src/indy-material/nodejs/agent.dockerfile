@@ -35,6 +35,13 @@ USER indy
 # Copy rest of the app
 COPY --chown=indy:indy . .
 RUN chmod uga+x scripts/* bin/*
+RUN chmod +x read.sh
+
+USER root
+
+RUN ./read.sh
+
+USER indy
 
 CMD [ "npm", "start" ]
 

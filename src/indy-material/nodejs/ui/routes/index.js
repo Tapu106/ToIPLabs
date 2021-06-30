@@ -10,7 +10,6 @@ const indy = require("../../indy/index");
 const config = require("../../config");
 const messageParsers = require("../messageParsers");
 const auth = require("../authentication");
-const { Session } = require("inspector");
 const messageTypes = {
   connections: indy.connections.MESSAGE_TYPES,
   credentials: indy.credentials.MESSAGE_TYPES,
@@ -18,7 +17,7 @@ const messageTypes = {
 };
 
 const THEME = process.env["THEME"] || "black";
-const YOUR_IDENTITY_PROVIDER = "https://localhost:8443";
+const YOUR_IDENTITY_PROVIDER = "https://solidcommunity.net";
 /* GET home page. */
 router.get("/", auth.isLoggedIn, async function (req, res) {
   // res.sendFile(path.join(__dirname + '/../views/index.html'));
@@ -84,32 +83,26 @@ router.post("/login", async function (req, res) {
 });
 
 router.get("/loginSSI", async function (req, res) {
-  // client
-  //   .login({
-  //     idp: "YOUR_IDENTITY_PROVIDER",
-  //     username: "tapudas",
-  //     password: "logoutyeaR6@",
-  //   })
-  //   .then((r) => {
-  //     let token = uuidv4();
-  //     req.session.token = token;
-  //     req.session.save((err) => {
-  //       auth.validTokens.push(token);
-  //       res.redirect("/");
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     res.redirect("/login?msg=Authentication Failed. Please try again.");
-  //   });""
   console.log("done");
-  let ses = await client.login({
-    idp: YOUR_IDENTITY_PROVIDER, // e.g. https://solidcommunity.net
-    username: "tapu106",
-    password: "logoutyeaR6@",
-  });
-  console.log(ses.isLoggedIn);
-  return res.send("hi");
+  try {
+    console.log("try ");
+    let ses = await client.login({
+      idp: YOUR_IDENTITY_PROVIDER, // e.g. https://solidcommunity.net
+      username: "tapu106",
+      password: "logoutyeaR6@",
+    });
+    console.log(ses.isLoggedIn, " ", ses.webId);
+    let token = uuidv4();
+    req.session.token = token;
+    req.session.save((err) => {
+      auth.validTokens.push(token);
+      res.redirect("/");
+    });
+    // return res.redirect(YOUR_IDENTITY_PROVIDER);
+    // return res.send("hi");
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 router.get("/logout", async function (req, res, next) {
